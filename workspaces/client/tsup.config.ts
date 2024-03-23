@@ -39,7 +39,7 @@ export default defineConfig(async (): Promise<Options[]> => {
       esbuildPlugins: [
         polyfillNode({
           globals: {
-            process: false,
+            process: true,
           },
           polyfills: {
             events: true,
@@ -54,13 +54,14 @@ export default defineConfig(async (): Promise<Options[]> => {
         '.wasm': 'binary',
       },
       metafile: true,
-      minify: false,
+      minify: true,
       outDir: OUTPUT_DIR,
       platform: 'browser',
-      shims: true,
+      shims: false,
       sourcemap: 'inline',
-      splitting: false,
-      target: ['chrome58', 'firefox57', 'safari11', 'edge18'],
+      splitting: true,
+      target: ['chrome123'],
+      // TODO: TRUEにするとバグる
       treeshake: false,
     },
   ];

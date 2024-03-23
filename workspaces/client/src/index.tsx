@@ -17,16 +17,24 @@ const main = async () => {
 
   $(document).ready(() => {
     if (window.location.pathname.startsWith('/admin')) {
-      ReactDOM.createRoot($('#root').get(0)!).render(<AdminApp />);
+      ReactDOM.createRoot(document.getElementById('root')!).render(<AdminApp />);
     } else {
-      ReactDOM.hydrateRoot(
-        $('#root').get(0)!,
+      // // NOTE: Viteで起動するためにSSRを止める
+      ReactDOM.createRoot(document.getElementById('root')!).render(
         <SWRConfig value={{ revalidateIfStale: true, revalidateOnFocus: false, revalidateOnReconnect: false }}>
           <BrowserRouter>
             <ClientApp />
           </BrowserRouter>
         </SWRConfig>,
       );
+      // ReactDOM.hydrateRoot(
+      //   $('#root').get(0)!,
+      //   <SWRConfig value={{ revalidateIfStale: true, revalidateOnFocus: false, revalidateOnReconnect: false }}>
+      //     <BrowserRouter>
+      //       <ClientApp />
+      //     </BrowserRouter>
+      //   </SWRConfig>,
+      // );
     }
   });
 };

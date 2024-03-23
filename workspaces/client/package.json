@@ -2,13 +2,15 @@
   "name": "@wsh-2024/client",
   "private": true,
   "scripts": {
+    "dev": "vite",
     "build": "pnpm run build:clean && pnpm run build:tsup && pnpm run build:copy",
     "build:clean": "rm -rf ./dist",
-    "build:copy": "cp -r ./assets ./dist/assets",
+    "build:copy": "cp -r ./assets ./dist/assets && cp ./dist/serviceworker.global.js ./public",
     "build:tsup": "tsup"
   },
   "dependencies": {
     "@jsquash/jxl": "1.1.0",
+    "@vitejs/plugin-react": "4.2.1",
     "@webcomponents/webcomponentsjs": "2.8.0",
     "@wsh-2024/admin": "workspace:*",
     "@wsh-2024/app": "workspace:*",
@@ -26,7 +28,8 @@
     "react-router-dom": "6.18.0",
     "regenerator-runtime": "0.14.1",
     "swr": "2.2.4",
-    "unorm": "1.6.0"
+    "unorm": "1.6.0",
+    "vite": "5.2.4"
   },
   "devDependencies": {
     "@node-kit/pnpm-workspace-root": "3.2.0",
@@ -38,6 +41,7 @@
     "@types/serviceworker": "0.0.83",
     "esbuild-plugin-polyfill-node": "0.3.0",
     "pkg-dir": "5.0.0",
-    "tsup": "8.0.1"
+    "tsup": "8.0.1",
+    "vite-plugin-node-polyfills": "0.21.0"
   }
 }

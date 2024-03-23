@@ -1,5 +1,5 @@
 import { Suspense, useEffect, useState } from 'react';
-import { useInterval, useUpdate } from 'react-use';
+import { useUpdate } from 'react-use';
 import styled from 'styled-components';
 
 import { addUnitIfNeeded } from '../../../lib/css/addUnitIfNeeded';
@@ -101,7 +101,8 @@ type Props = {
 const ComicViewerCore: React.FC<Props> = ({ episodeId }) => {
   // 画面のリサイズに合わせて再描画する
   const rerender = useUpdate();
-  useInterval(rerender, 0);
+  // useInterval(rerender, 0);
+  console.log('ComicViewerCore');
 
   const { data: episode } = useEpisode({ params: { episodeId } });
 
@@ -207,6 +208,14 @@ const ComicViewerCore: React.FC<Props> = ({ episodeId }) => {
     };
   }, [pageCountParView, pageWidth, scrollView]);
 
+  // NOTE: 不要かも
+  useEffect(() => {
+    window.addEventListener('resize', rerender);
+    return () => {
+      window.removeEventListener('resize', rerender);
+    };
+  }, [rerender]);
+
   return (
     <_Container ref={containerRef}>
       <_Wrapper ref={scrollViewRef} $paddingInline={viewerPaddingInline} $pageWidth={pageWidth}>
@@ -220,7 +229,15 @@ const ComicViewerCore: React.FC<Props> = ({ episodeId }) => {
 
 const ComicViewerCoreWithSuspense: React.FC<Props> = ({ episodeId }) => {
   return (
-    <Suspense fallback={null}>
+    <Suspense
+      fallback={
+        <_Container>
+          <_Wrapper $paddingInline={0} $pageWidth={1075}>
+            <div style={{ height: 1518 }} />
+          </_Wrapper>
+        </_Container>
+      }
+    >
       <ComicViewerCore episodeId={episodeId} />
     </Suspense>
   );

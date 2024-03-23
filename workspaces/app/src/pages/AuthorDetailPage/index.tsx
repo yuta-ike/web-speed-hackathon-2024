@@ -1,4 +1,4 @@
-import { Suspense, useId } from 'react';
+import { Suspense } from 'react';
 import { useParams } from 'react-router-dom';
 import type { RouteParams } from 'regexparam';
 import { styled } from 'styled-components';
@@ -12,7 +12,6 @@ import { Image } from '../../foundation/components/Image';
 import { Separator } from '../../foundation/components/Separator';
 import { Spacer } from '../../foundation/components/Spacer';
 import { Text } from '../../foundation/components/Text';
-import { useImage } from '../../foundation/hooks/useImage';
 import { Color, Space, Typography } from '../../foundation/styles/variables';
 
 const _HeadingWrapper = styled.section`
@@ -37,8 +36,7 @@ const AuthorDetailPage: React.FC = () => {
 
   const { data: author } = useAuthor({ params: { authorId } });
 
-  const imageUrl = useImage({ height: 128, imageId: author.image.id, width: 128 });
-  const bookListA11yId = useId();
+  const imageUrl = `/assets/converted/${author.image.id}_128.webp`;
 
   return (
     <Box height="100%" px={Space * 2}>
@@ -61,8 +59,8 @@ const AuthorDetailPage: React.FC = () => {
 
       <Separator />
 
-      <Box aria-labelledby={bookListA11yId} as="section" maxWidth="100%" py={Space * 2} width="100%">
-        <Text as="h2" color={Color.MONO_100} id={bookListA11yId} typography={Typography.NORMAL20} weight="bold">
+      <Box aria-labelledby="bookList" as="section" maxWidth="100%" py={Space * 2} width="100%">
+        <Text as="h2" color={Color.MONO_100} id="bookList" typography={Typography.NORMAL20} weight="bold">
           作品一覧
         </Text>
 
@@ -70,7 +68,13 @@ const AuthorDetailPage: React.FC = () => {
 
         <Flex align="center" as="ul" direction="column" justify="center">
           {author.books.map((book) => (
-            <BookListItem key={book.id} bookId={book.id} />
+            <BookListItem
+              key={book.id}
+              description={book.description}
+              id={book.id}
+              imageId={book.image.id}
+              name={book.name}
+            />
           ))}
           {author.books.length === 0 && (
             <>

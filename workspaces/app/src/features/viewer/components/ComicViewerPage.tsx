@@ -1,49 +1,59 @@
 import { useRef } from 'react';
 import { useAsync } from 'react-use';
-import styled from 'styled-components';
 
 import { decrypt } from '@wsh-2024/image-encrypt/src/decrypt';
-
-import { getImageUrl } from '../../../lib/image/getImageUrl';
-
-const _Canvas = styled.canvas`
-  height: 100%;
-  width: auto;
-  flex-grow: 0;
-  flex-shrink: 0;
-`;
 
 type Props = {
   pageImageId: string;
 };
 
+// TODO: Intersection Observer
 export const ComicViewerPage = ({ pageImageId }: Props) => {
   const ref = useRef<HTMLCanvasElement>(null);
 
   useAsync(async () => {
-    const image = new Image();
-    image.src = getImageUrl({
-      format: 'jxl',
-      imageId: pageImageId,
-    });
-    await image.decode();
+    try {
+      const image = new Image();
+      image.crossOrigin = 'anonymous';
+      const src = `/assets/jxl/${pageImageId}.jxl`;
+      console.log(src);
+      image.src = src;
+      console.log('AAA');
+      await image.decode().catch(console.error);
+      console.log('BBB');
 
-    const canvas = ref.current!;
-    canvas.width = image.naturalWidth;
-    canvas.height = image.naturalHeight;
-    const ctx = canvas.getContext('2d')!;
+      const canvas = ref.current!;
+      canvas.width = image.naturalWidth;
+      canvas.height = image.naturalHeight;
+      const ctx = canvas.getContext('2d')!;
+      console.log('CCC');
 
-    decrypt({
-      exportCanvasContext: ctx,
-      sourceImage: image,
-      sourceImageInfo: {
-        height: image.naturalHeight,
-        width: image.naturalWidth,
-      },
-    });
+      decrypt({
+        exportCanvasContext: ctx,
+        sourceImage: image,
+        sourceImageInfo: {
+          height: image.naturalHeight,
+          width: image.naturalWidth,
+        },
+      });
 
-    canvas.setAttribute('role', 'img');
+      canvas.setAttribute('role', 'img');
+    } catch (e) {
+      console.log(e);
+    }
   }, [pageImageId]);
 
-  return <_Canvas ref={ref} />;
+  return (
+    <canvas
+      ref={ref}
+      height={1518}
+      style={{
+        flexGrow: 0,
+        flexShrink: 0,
+        height: '100%',
+        width: 'auto',
+      }}
+      width={1075}
+    />
+  );
 };

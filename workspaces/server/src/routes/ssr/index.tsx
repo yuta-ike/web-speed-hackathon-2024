@@ -70,7 +70,8 @@ async function createHTML({
 }
 
 app.get('*', async (c) => {
-  const injectData = await createInjectDataStr();
+  // const injectData = await createInjectDataStr();
+  const injectData = {};
   const sheet = new ServerStyleSheet();
 
   try {

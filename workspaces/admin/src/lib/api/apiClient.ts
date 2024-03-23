@@ -1,9 +1,11 @@
 import ky from 'ky';
 
+import { getEnv } from '../../../../app/src/lib/env/getEnv';
+
 const createKyInstance = () => {
   const instance = ky.create({
     credentials: 'include',
-    prefixUrl: process.env['API_URL'] || '/',
+    prefixUrl: getEnv('API_URL', '/'),
     timeout: false,
   });
 

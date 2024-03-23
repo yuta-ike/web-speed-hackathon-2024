@@ -118,6 +118,7 @@ app.get(
       width: Math.ceil(image.width * scale),
     });
 
+    console.log('image/index.ts -- 6');
     const resBinary = await IMAGE_CONVERTER[resImgFormat].encode({
       colorSpace: 'srgb',
       data: new Uint8ClampedArray(manipulated.data),
@@ -125,6 +126,7 @@ app.get(
       width: manipulated.width,
     });
 
+    console.log('image/index.ts -- 7');
     c.header('Content-Type', IMAGE_MIME_TYPE[resImgFormat]);
     return c.body(resBinary);
   },

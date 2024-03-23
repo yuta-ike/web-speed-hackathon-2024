@@ -1,4 +1,4 @@
-import { Suspense, useCallback, useEffect, useId, useState } from 'react';
+import { useCallback, useDeferredValue, useState } from 'react';
 
 import { useBookList } from '../../features/book/hooks/useBookList';
 import { Box } from '../../foundation/components/Box';
@@ -8,12 +8,9 @@ import { Color, Space, Typography } from '../../foundation/styles/variables';
 import { Input } from './internal/Input';
 import { SearchResult } from './internal/SearchResult';
 
-const SearchPage: React.FC = () => {
-  const { data: books } = useBookList({ query: {} });
+export const SearchPage: React.FC = () => {
+  const { data: books, isLoading } = useBookList({ query: {} });
 
-  const searchResultsA11yId = useId();
-
-  const [isClient, setIsClient] = useState(false);
   const [keyword, setKeyword] = useState('');
 
   const onChangedInput = useCallback(
@@ -23,29 +20,17 @@ const SearchPage: React.FC = () => {
     [setKeyword],
   );
 
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
+  const deferredKeyword = useDeferredValue(keyword);
 
   return (
     <Box px={Space * 2}>
-      <Input disabled={!isClient} onChange={onChangedInput} />
-      <Box aria-labelledby={searchResultsA11yId} as="section" maxWidth="100%" py={Space * 2} width="100%">
-        <Text color={Color.MONO_100} id={searchResultsA11yId} typography={Typography.NORMAL20} weight="bold">
+      <Input disabled={isLoading} onChange={onChangedInput} />
+      <Box aria-labelledby="searchResults" as="section" maxWidth="100%" py={Space * 2} width="100%">
+        <Text color={Color.MONO_100} id="searchResults" typography={Typography.NORMAL20} weight="bold">
           検索結果
         </Text>
-        {keyword !== '' && <SearchResult books={books} keyword={keyword} />}
+        {books != null && deferredKeyword !== '' && <SearchResult books={books} keyword={deferredKeyword} />}
       </Box>
     </Box>
   );
 };
-
-const SearchPageWithSuspense: React.FC = () => {
-  return (
-    <Suspense fallback={null}>
-      <SearchPage />
-    </Suspense>
-  );
-};
-
-export { SearchPageWithSuspense as SearchPage };

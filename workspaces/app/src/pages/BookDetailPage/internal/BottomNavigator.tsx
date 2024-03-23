@@ -1,7 +1,9 @@
 import { animated, useSpring } from '@react-spring/web';
+import { useAtom } from 'jotai/react';
 import { useCallback } from 'react';
 import { styled } from 'styled-components';
 
+import { FavoriteBookAtomFamily } from '../../../features/book/atoms/FavoriteBookAtomFamily';
 import { Link } from '../../../foundation/components/Link';
 import { Color, Radius, Space } from '../../../foundation/styles/variables';
 
@@ -37,20 +39,21 @@ const _ReadLink = styled(Link)`
 
 type Props = {
   bookId: string;
-  isFavorite: boolean;
   latestEpisodeId: string;
-  onClickFav: () => void;
 };
 
-export const BottomNavigator: React.FC<Props> = ({ bookId, isFavorite, latestEpisodeId, onClickFav }) => {
+export const BottomNavigator: React.FC<Props> = ({ bookId, latestEpisodeId }) => {
+  // TODO: 置き換え
   const props = useSpring({
     from: { transform: 'translateY(100%)' },
     to: { transform: 'translateY(0)' },
   });
 
+  const [isFavorite, toggleFavorite] = useAtom(FavoriteBookAtomFamily(bookId));
+
   const handleFavClick = useCallback(() => {
-    onClickFav();
-  }, [onClickFav]);
+    toggleFavorite();
+  }, [toggleFavorite]);
 
   return (
     <_Wrapper>

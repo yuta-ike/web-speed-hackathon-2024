@@ -1,15 +1,17 @@
 import path from 'path-browserify';
 
+import { getEnv } from '@wsh-2024/app/src/lib/env/getEnv';
+
 async function wait(milliseconds: number) {
   return new Promise((resolve) => setTimeout(resolve, milliseconds));
 }
 
 export async function preloadImages() {
-  if (process.env['PATH_LIST'] == null) {
+  if (getEnv('PATH_LIST', '/') == null) {
     return;
   }
 
-  const imagePathList: string[] = process.env['PATH_LIST'].split(',').filter((imagePath) => {
+  const imagePathList: string[] = (getEnv('PATH_LIST', '/') as string).split(',').filter((imagePath) => {
     const extension = path.parse(imagePath).ext.toLowerCase();
     return ['.bmp', '.jpg', '.jpeg', '.gif', '.png', '.webp', '.avif'].includes(extension);
   });

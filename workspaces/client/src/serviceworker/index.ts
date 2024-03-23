@@ -15,15 +15,22 @@ self.addEventListener('install', (ev: ExtendableEvent) => {
 });
 
 self.addEventListener('activate', (ev: ExtendableEvent) => {
+  console.log('[service worker] ACTIVE!!!!!!!!!!!!!!!!!!!!');
   ev.waitUntil(self.clients.claim());
 });
 
 self.addEventListener('fetch', (ev: FetchEvent) => {
-  ev.respondWith(
-    queue.add(() => onFetch(ev.request), {
-      throwOnTimeout: true,
-    }),
-  );
+  if (!ev.request.url.endsWith('.jxl')) {
+    ev.respondWith(fetch(ev.request));
+  } else {
+    console.log('[service worker] FETCH::::::::::::::::::::::::');
+    console.log(ev);
+    ev.respondWith(
+      queue.add(() => onFetch(ev.request), {
+        throwOnTimeout: true,
+      }),
+    );
+  }
 });
 
 async function onFetch(request: Request): Promise<Response> {
@@ -31,10 +38,6 @@ async function onFetch(request: Request): Promise<Response> {
   await jitter();
 
   const res = await fetch(request);
-
-  if (res.headers.get('Content-Type') === 'image/jxl') {
-    return transformJpegXLToBmp(res);
-  } else {
-    return res;
-  }
+  console.log(res);
+  return transformJpegXLToBmp(res);
 }
