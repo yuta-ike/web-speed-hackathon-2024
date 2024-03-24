@@ -1,24 +1,21 @@
 import { Button, Td, Text } from '@chakra-ui/react';
-import { lazy, memo, useState, useTransition } from 'react';
+import { memo, useTransition } from 'react';
 
 import type { GetBookResponse } from '@wsh-2024/schema/src/api/books/GetBookResponse';
 
-const BookDetailModal = lazy(() => import('./BookDetailModal').then((module) => ({ default: module.BookDetailModal })));
-
 type ListItemProps = {
   book: GetBookResponse;
+  onOpenDetail: () => void;
 };
 
-export const ListItem = memo(function ListItemInner({ book }: ListItemProps) {
-  const [open, setOpen] = useState(false);
-
+export const ListItem = memo(function ListItemInner({ book, onOpenDetail }: ListItemProps) {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_, startTransition] = useTransition();
 
   return (
     <>
       <Td textAlign="center" verticalAlign="middle">
-        <Button colorScheme="teal" onClick={() => startTransition(() => setOpen(true))} variant="solid">
+        <Button colorScheme="teal" onClick={() => startTransition(() => onOpenDetail())} variant="solid">
           詳細
         </Button>
       </Td>
@@ -34,8 +31,6 @@ export const ListItem = memo(function ListItemInner({ book }: ListItemProps) {
           {book.author.id}
         </Text>
       </Td>
-
-      {open && <BookDetailModal isOpen book={book} onClose={() => setOpen(false)} />}
     </>
   );
 });

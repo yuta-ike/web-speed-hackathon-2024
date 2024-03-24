@@ -16,6 +16,7 @@ export const BookDetailContent: React.FC<BookDetailContentProps> = ({ book, onCl
   const { refetch: refetchBookList } = useBookList();
   const { mutate: deleteBook } = useDeleteBook();
 
+  console.log('BookDetailContent', book);
   const handleEditClick = useCallback(() => {
     onEdit();
   }, [onEdit]);

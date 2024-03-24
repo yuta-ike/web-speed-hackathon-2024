@@ -60,6 +60,7 @@ export const EpisodeDetailEditor: React.FC<Props> = ({ book, episode }) => {
       nameRuby: episode?.nameRuby,
     },
     onSubmit(values) {
+      console.log(values);
       if (episode == null) {
         return createEpisode(
           {

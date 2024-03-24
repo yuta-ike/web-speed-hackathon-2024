@@ -1,9 +1,11 @@
 import { Table, Tbody, Th, Thead, Tr } from '@chakra-ui/react';
-import { memo, useMemo } from 'react';
+import { lazy, memo, useMemo, useState } from 'react';
 import { TableVirtuoso } from 'react-virtuoso';
 
 import { useBookList } from '../../../features/books/hooks/useBookList';
 import { isContains } from '../../../lib/filter/isContains';
+
+import { ListItem } from './ListItem';
 
 const BookSearchKind = {
   AuthorId: 'AuthorId',
@@ -13,7 +15,8 @@ const BookSearchKind = {
 } as const;
 export type BookSearchKind = (typeof BookSearchKind)[keyof typeof BookSearchKind];
 
-import { ListItem } from './ListItem';
+const BookDetailModal = lazy(() => import('./BookDetailModal').then((module) => ({ default: module.BookDetailModal })));
+
 type ListTableProps = {
   kind: BookSearchKind;
   query: string;
@@ -51,22 +54,31 @@ export const ListTable = memo(function ListTableInner({ kind, query }: ListTable
     }
   }, [kind, query, bookList]);
 
+  const [detailModalId, setDetailModalId] = useState<string | null>(null);
+
+  const detailBook = useMemo(() => {
+    return bookList.find((book) => book.id === detailModalId);
+  }, [bookList, detailModalId]);
+
   return (
-    <TableVirtuoso
-      components={{
-        Table: (props) => <Table {...props} variant="striped" />,
-        TableBody: Tbody,
-        TableHead: Thead,
-      }}
-      data={filteredBookList}
-      fixedHeaderContent={() => (
-        <Tr background="white">
-          <Th w={120}></Th>
-          <Th>作品名</Th>
-          <Th>作者名</Th>
-        </Tr>
-      )}
-      itemContent={(_, book) => <ListItem key={book.id} book={book} />}
-    />
+    <>
+      <TableVirtuoso
+        components={{
+          Table: (props) => <Table {...props} variant="striped" />,
+          TableBody: Tbody,
+          TableHead: Thead,
+        }}
+        data={filteredBookList}
+        fixedHeaderContent={() => (
+          <Tr background="white">
+            <Th w={120}></Th>
+            <Th>作品名</Th>
+            <Th>作者名</Th>
+          </Tr>
+        )}
+        itemContent={(_, book) => <ListItem key={book.id} book={book} onOpenDetail={() => setDetailModalId(book.id)} />}
+      />
+      {detailBook != null && <BookDetailModal isOpen book={detailBook} onClose={() => setDetailModalId(null)} />}
+    </>
   );
 });
