@@ -21,7 +21,7 @@ app.use(
     allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
     credentials: true,
     exposeHeaders: ['Content-Encoding', 'X-Content-Encoding'],
-    origin: ['http://localhost:5173', 'http://localhost:8000'],
+    origin: ['http://localhost:8000', 'http://localhost:5173'],
   }),
 );
 app.use(compressMiddleware);

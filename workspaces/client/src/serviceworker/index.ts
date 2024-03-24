@@ -20,7 +20,7 @@ self.addEventListener('activate', (ev: ExtendableEvent) => {
 });
 
 self.addEventListener('fetch', (ev: FetchEvent) => {
-  if (!ev.request.url.endsWith('.jxl')) {
+  if (!ev.request.url.endsWith('format=jxl')) {
     ev.respondWith(fetch(ev.request));
   } else {
     console.log('[service worker] FETCH::::::::::::::::::::::::');

@@ -23,9 +23,10 @@ export const ComicViewerPage = ({ importable, index, onFinished, pageImageId }: 
       hasImportedRef.current = true;
       const image = new Image();
       image.crossOrigin = 'anonymous';
-      const src = `/assets/jxl/${pageImageId}.jxl`;
-      console.log(src);
-      image.src = src;
+      const url = new URL(`/images/${pageImageId}`, location.href);
+      url.searchParams.set('format', 'jxl');
+      console.log(url);
+      image.src = url.href;
       if (index < 3) {
         image.fetchPriority = 'high';
       }
