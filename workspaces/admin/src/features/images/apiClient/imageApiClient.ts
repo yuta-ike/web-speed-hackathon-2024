@@ -13,7 +13,7 @@ export type ImageApiClient = DomainSpecificApiClientInterface<{
 export const imageApiClient: ImageApiClient = {
   post: async ({ body }) => {
     const formData = new FormData();
-    formData.append('alt', body.alt);
+    formData.append('alt', body.alt as string);
     formData.append('content', body.content);
 
     const response = await apiClient

@@ -12,6 +12,7 @@
 // });
 
 export async function isSupportedImage(image: File): Promise<boolean> {
+  console.log(image);
   return true;
   // await initMagikaPromise;
   // const prediction = await magika.identifyBytes(new Uint8Array(await image.arrayBuffer()));
