@@ -1,4 +1,5 @@
 import { Hono } from 'hono';
+import { compress } from 'hono/compress';
 import { cors } from 'hono/cors';
 import { HTTPException } from 'hono/http-exception';
 import { secureHeaders } from 'hono/secure-headers';
@@ -24,6 +25,7 @@ app.use(
     origin: ['http://localhost:8000', 'http://localhost:5173', 'https://wandering-fredi-yuta-ike.koyeb.app/'],
   }),
 );
+app.use(compress());
 app.use(compressMiddleware);
 app.use(cacheControlMiddleware);
 
