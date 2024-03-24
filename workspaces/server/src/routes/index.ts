@@ -21,7 +21,7 @@ app.use(
     allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
     credentials: true,
     exposeHeaders: ['Content-Encoding', 'X-Content-Encoding'],
-    origin: ['http://localhost:8000', 'http://localhost:5173'],
+    origin: ['http://localhost:8000', 'http://localhost:5173', 'https://wandering-fredi-yuta-ike.koyeb.app/'],
   }),
 );
 app.use(compressMiddleware);
