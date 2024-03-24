@@ -9,7 +9,7 @@ import { Input } from './internal/Input';
 import { SearchResult } from './internal/SearchResult';
 
 export const SearchPage: React.FC = () => {
-  const { data: books, isLoading } = useBookList({ query: {} });
+  const { data: books } = useBookList({ query: {} });
 
   const [keyword, setKeyword] = useState('');
 
@@ -24,7 +24,7 @@ export const SearchPage: React.FC = () => {
 
   return (
     <Box px={Space * 2}>
-      <Input disabled={isLoading} onChange={onChangedInput} />
+      <Input onChange={onChangedInput} />
       <Box aria-labelledby="searchResults" as="section" maxWidth="100%" py={Space * 2} width="100%">
         <Text color={Color.MONO_100} id="searchResults" typography={Typography.NORMAL20} weight="bold">
           検索結果
