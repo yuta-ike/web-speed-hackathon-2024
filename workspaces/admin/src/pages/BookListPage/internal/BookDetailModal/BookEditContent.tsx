@@ -18,26 +18,33 @@ import { useFormik } from 'formik';
 import { useEffect, useRef, useState } from 'react';
 import * as yup from 'yup';
 
-import type { GetBookResponse } from '@wsh-2024/schema/src/api/books/GetBookResponse';
-
 import { useUpdateBook } from '../../../../features/books/hooks/useUpdateBook';
 import { isSupportedImage } from '../../../../lib/image/isSupportedImage';
 
 type BookEditContentProps = {
-  book: GetBookResponse;
+  description: string;
+  id: string;
+  name: string;
+  nameRuby: string;
   onEditComplete: () => void;
 };
 
-export const BookEditContent: React.FC<BookEditContentProps> = ({ book, onEditComplete }) => {
+export const BookEditContent: React.FC<BookEditContentProps> = ({
+  description,
+  id,
+  name,
+  nameRuby,
+  onEditComplete,
+}) => {
   const { mutate: updateBook } = useUpdateBook();
 
   const formik = useFormik({
     initialValues: {
-      description: book.description,
-      id: book.id,
+      description: description,
+      id: id,
       image: undefined as File | undefined,
-      name: book.name,
-      nameRuby: book.nameRuby,
+      name: name,
+      nameRuby: nameRuby,
     },
     onSubmit(values) {
       updateBook(

@@ -5,7 +5,6 @@ import type { GetBookResponse } from '@wsh-2024/schema/src/api/books/GetBookResp
 
 import { useBookList } from '../../../../features/books/hooks/useBookList';
 import { useDeleteBook } from '../../../../features/books/hooks/useDeleteBook';
-import { getImageUrl } from '../../../../lib/image/getImageUrl';
 
 type BookDetailContentProps = {
   book: GetBookResponse;
@@ -43,7 +42,7 @@ export const BookDetailContent: React.FC<BookDetailContentProps> = ({ book, onCl
           aspectRatio="3 / 4"
           height={256}
           objectFit="cover"
-          src={getImageUrl({ format: 'jpg', imageId: book.image.id })}
+          src={`/assets/converted/${book.image.id}_rect_lg.webp`}
           width={192}
         />
         <Stack p={4} spacing={2}>

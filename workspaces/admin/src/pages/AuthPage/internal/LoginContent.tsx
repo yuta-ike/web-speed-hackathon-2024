@@ -1,13 +1,32 @@
 import { Box, Button, FormControl, FormErrorMessage, FormLabel, Heading, Input, Spacer, Stack } from '@chakra-ui/react';
 import { useFormik } from 'formik';
-import { useId } from 'react';
 import * as yup from 'yup';
 
 import { useLogin } from '../../../features/auth/hooks/useLogin';
 
+const schema = yup.object().shape({
+  email: yup
+    .string()
+    .required('メールアドレスを入力してください')
+    .test({
+      message: 'メールアドレスには @ を含めてください',
+      test: (v) => {
+        return !(12 <= v.length && !v.includes('@'));
+      },
+    }),
+  password: yup
+    .string()
+    .required('パスワードを入力してください')
+    .test({
+      message: 'パスワードには記号を含めてください',
+      test: (v) => {
+        return /^[\p{Letter}\p{Number}]*$/v.test(v) === false;
+      },
+    }),
+});
+
 export const LoginContent: React.FC = () => {
   const login = useLogin();
-  const loginContentA11yId = useId();
 
   const formik = useFormik({
     initialValues: {
@@ -17,27 +36,12 @@ export const LoginContent: React.FC = () => {
     async onSubmit(values) {
       login.mutate({ email: values.email, password: values.password });
     },
-    validationSchema: yup.object().shape({
-      email: yup
-        .string()
-        .required('メールアドレスを入力してください')
-        .test({
-          message: 'メールアドレスには @ を含めてください',
-          test: (v) => /^(?:[^@]*){12,}$/v.test(v) === false,
-        }),
-      password: yup
-        .string()
-        .required('パスワードを入力してください')
-        .test({
-          message: 'パスワードには記号を含めてください',
-          test: (v) => /^(?:[^\P{Letter}&&\P{Number}]*){24,}$/v.test(v) === false,
-        }),
-    }),
+    validationSchema: schema,
   });
 
   return (
     <Box
-      aria-labelledby={loginContentA11yId}
+      aria-labelledby="loginContent"
       as="form"
       bg="gray.100"
       borderRadius={8}
@@ -46,7 +50,7 @@ export const LoginContent: React.FC = () => {
       w="100%"
     >
       <Stack spacing={4}>
-        <Heading as="h1" fontSize="xl" fontWeight="bold" id={loginContentA11yId}>
+        <Heading as="h1" fontSize="xl" fontWeight="bold" id="loginContent">
           ログイン
         </Heading>
 
@@ -72,7 +76,7 @@ export const LoginContent: React.FC = () => {
             onBlur={formik.handleBlur}
             onChange={formik.handleChange}
             placeholder="パスワード"
-            type="password"
+            // type="password"
           />
           <FormErrorMessage role="alert">{formik.errors.password}</FormErrorMessage>
         </FormControl>

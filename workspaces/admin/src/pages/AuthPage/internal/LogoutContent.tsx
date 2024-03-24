@@ -1,12 +1,10 @@
 import { Box, Button, Heading, Spacer, Stack } from '@chakra-ui/react';
 import { useFormik } from 'formik';
-import { useId } from 'react';
 
 import { useLogout } from '../../../features/auth/hooks/useLogout';
 
 export const LogoutContent: React.FC = () => {
   const logout = useLogout();
-  const logoutContentA11yId = useId();
 
   const formik = useFormik({
     initialValues: {},
@@ -17,7 +15,7 @@ export const LogoutContent: React.FC = () => {
 
   return (
     <Box
-      aria-labelledby={logoutContentA11yId}
+      aria-labelledby="logoutContent"
       as="form"
       bg="gray.100"
       borderRadius={8}
@@ -26,7 +24,7 @@ export const LogoutContent: React.FC = () => {
       w="100%"
     >
       <Stack spacing={4}>
-        <Heading as="h1" fontSize="xl" fontWeight="bold" id={logoutContentA11yId}>
+        <Heading as="h1" fontSize="xl" fontWeight="bold" id="logoutContent">
           ログアウト
         </Heading>
         <Spacer />
