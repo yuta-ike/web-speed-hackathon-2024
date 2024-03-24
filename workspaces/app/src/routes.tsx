@@ -45,7 +45,7 @@ export const Router: React.FC = () => {
       <Route element={<CommonLayout />} path={'/'}>
         <Route
           element={
-            <Suspense fallback={null}>
+            <Suspense fallback={<div style={{ height: '200vh' }} />}>
               <TopPage />
             </Suspense>
           }
