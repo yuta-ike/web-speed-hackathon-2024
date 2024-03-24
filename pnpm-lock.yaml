@@ -401,6 +401,9 @@ importers:
       log4js:
         specifier: 6.9.1
         version: 6.9.1
+      magika:
+        specifier: 0.2.12
+        version: 0.2.12(seedrandom@3.0.5)
       moment-timezone:
         specifier: 0.5.45
         version: 0.5.45
