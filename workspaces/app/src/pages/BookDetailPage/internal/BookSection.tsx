@@ -49,7 +49,7 @@ export const BookSection = ({ bookId }: BookSectionProps) => {
   return (
     <>
       <_HeadingWrapper aria-label="作品情報">
-        <Image alt={book.name} height={256} objectFit="cover" src={bookImageUrl} width={192} />
+        <Image alt={book.name} height={256} loading="eager" objectFit="cover" src={bookImageUrl} width={192} />
         <Flex align="flex-start" direction="column" gap={Space * 1} justify="flex-end">
           <Box>
             <Text color={Color.MONO_100} typography={Typography.NORMAL20} weight="bold">
@@ -66,7 +66,14 @@ export const BookSection = ({ bookId }: BookSectionProps) => {
           <_AuthorWrapper to={`/authors/${book.author.id}`}>
             {auhtorImageUrl != null && (
               <_AvatarWrapper>
-                <Image alt={book.author.name} height={32} objectFit="cover" src={auhtorImageUrl} width={32} />
+                <Image
+                  alt={book.author.name}
+                  height={32}
+                  loading="eager"
+                  objectFit="cover"
+                  src={auhtorImageUrl}
+                  width={32}
+                />
               </_AvatarWrapper>
             )}
             <Text color={Color.MONO_100} typography={Typography.NORMAL14}>

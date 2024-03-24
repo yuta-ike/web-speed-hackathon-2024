@@ -8,7 +8,7 @@ export const RankingSection = () => {
   return (
     <Box maxWidth="100%" overflowX="hidden" overflowY="hidden">
       <Flex align="center" as="ul" direction="column" justify="center">
-        {rankingList?.map((ranking) => <RankingCard key={ranking.id} book={ranking.book} />)}
+        {rankingList?.map((ranking, index) => <RankingCard key={ranking.id} book={ranking.book} inFv={index < 3} />)}
       </Flex>
     </Box>
   );

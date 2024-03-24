@@ -1,4 +1,4 @@
-import { Suspense, useEffect, useState } from 'react';
+import { Suspense, useCallback, useEffect, useState } from 'react';
 import { useUpdate } from 'react-use';
 import styled from 'styled-components';
 
@@ -102,7 +102,6 @@ const ComicViewerCore: React.FC<Props> = ({ episodeId }) => {
   // 画面のリサイズに合わせて再描画する
   const rerender = useUpdate();
   // useInterval(rerender, 0);
-  console.log('ComicViewerCore');
 
   const { data: episode } = useEpisode({ params: { episodeId } });
 
@@ -216,11 +215,30 @@ const ComicViewerCore: React.FC<Props> = ({ episodeId }) => {
     };
   }, [rerender]);
 
+  const [finishedCount, setFinishedCount] = useState(0);
+
+  const handhleFinished = useCallback(() => {
+    setFinishedCount((prev) => prev + 1);
+  }, []);
+
   return (
     <_Container ref={containerRef}>
-      <_Wrapper ref={scrollViewRef} $paddingInline={viewerPaddingInline} $pageWidth={pageWidth}>
-        {episode.pages.map((page) => {
-          return <ComicViewerPage key={page.id} pageImageId={page.image.id} />;
+      <_Wrapper
+        ref={scrollViewRef}
+        $paddingInline={viewerPaddingInline}
+        $pageWidth={pageWidth}
+        id="comic-viewer-wrapper"
+      >
+        {episode.pages.map((page, i) => {
+          return (
+            <ComicViewerPage
+              key={page.id}
+              importable={2 <= finishedCount}
+              index={i}
+              onFinished={handhleFinished}
+              pageImageId={page.image.id}
+            />
+          );
         })}
       </_Wrapper>
     </_Container>

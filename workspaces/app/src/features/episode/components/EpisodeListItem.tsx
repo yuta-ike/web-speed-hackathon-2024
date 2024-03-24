@@ -36,9 +36,10 @@ type Props = {
     };
     name: string;
   };
+  inFv?: boolean;
 };
 
-export const EpisodeListItem: React.FC<Props> = ({ bookId, episode }) => {
+export const EpisodeListItem: React.FC<Props> = ({ bookId, episode, inFv = false }) => {
   const imageUrl = `/assets/converted/${episode.image.id}_96.webp`;
 
   return (
@@ -48,7 +49,14 @@ export const EpisodeListItem: React.FC<Props> = ({ bookId, episode }) => {
         <Flex align="flex-start" gap={Space * 2.5} justify="flex-start">
           {imageUrl != null && (
             <_ImgWrapper>
-              <Image alt={episode.name} height={96} objectFit="cover" src={imageUrl} width={96} />
+              <Image
+                alt={episode.name}
+                height={96}
+                loading={inFv ? 'eager' : 'lazy'}
+                objectFit="cover"
+                src={imageUrl}
+                width={96}
+              />
             </_ImgWrapper>
           )}
           <Box width="100%">

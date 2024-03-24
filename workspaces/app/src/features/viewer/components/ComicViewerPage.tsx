@@ -1,24 +1,35 @@
-import { useRef } from 'react';
-import { useAsync } from 'react-use';
+import { useCallback, useEffect, useRef } from 'react';
 
 import { decrypt } from '@wsh-2024/image-encrypt/src/decrypt';
 
 type Props = {
+  importable: boolean;
+  index: number;
+  onFinished: () => void;
   pageImageId: string;
 };
 
 // TODO: Intersection Observer
-export const ComicViewerPage = ({ pageImageId }: Props) => {
+export const ComicViewerPage = ({ importable, index, onFinished, pageImageId }: Props) => {
   const ref = useRef<HTMLCanvasElement>(null);
+  const hasImportedRef = useRef(false);
 
-  useAsync(async () => {
+  const importImage = useCallback(async () => {
+    if (hasImportedRef.current) {
+      return;
+    }
+
     try {
+      hasImportedRef.current = true;
       const image = new Image();
       image.crossOrigin = 'anonymous';
       const src = `/assets/jxl/${pageImageId}.jxl`;
       console.log(src);
       image.src = src;
-      console.log('AAA');
+      if (index < 3) {
+        image.fetchPriority = 'high';
+      }
+      console.log('AAA IMPORT: ', index);
       await image.decode().catch(console.error);
       console.log('BBB');
 
@@ -36,12 +47,47 @@ export const ComicViewerPage = ({ pageImageId }: Props) => {
           width: image.naturalWidth,
         },
       });
+      onFinished();
 
       canvas.setAttribute('role', 'img');
     } catch (e) {
       console.log(e);
     }
-  }, [pageImageId]);
+  }, [index, onFinished, pageImageId]);
+
+  useEffect(() => {
+    if (3 <= index) {
+      return;
+    }
+    importImage();
+  }, [importImage, index, pageImageId]);
+
+  useEffect(() => {
+    const canvasElm = ref.current;
+    if (canvasElm == null) {
+      return;
+    }
+    if (importable) {
+      const callback = () => {
+        setTimeout(() => {
+          importImage();
+        }, 200);
+      };
+      const observer = new IntersectionObserver(callback, {
+        root: document.getElementById('comic-viewer-wrapper')!,
+        rootMargin: '600px',
+        threshold: 0,
+      });
+      // TODO: 暫定
+      setTimeout(() => {
+        observer.observe(canvasElm);
+      }, 500);
+      return () => {
+        observer.disconnect();
+      };
+    }
+    return;
+  }, [importImage, importable, index]);
 
   return (
     <canvas

@@ -8,6 +8,7 @@ export const HeroImage: React.FC = () => {
     >
       <img
         alt="Cyber TOON"
+        loading="eager"
         src="/assets/hero.webp"
         style={{
           aspectRatio: '16 / 9',

@@ -14,8 +14,8 @@ export const EpisodeListSection = ({ bookId }: EpisodeListSectionProps) => {
 
   return (
     <Flex align="center" as="ul" direction="column" justify="center">
-      {episodeList.map((episode) => (
-        <EpisodeListItem key={episode.id} bookId={bookId} episode={episode} />
+      {episodeList.map((episode, index) => (
+        <EpisodeListItem key={episode.id} bookId={bookId} episode={episode} inFv={index < 8} />
       ))}
       {episodeList.length === 0 && (
         <>

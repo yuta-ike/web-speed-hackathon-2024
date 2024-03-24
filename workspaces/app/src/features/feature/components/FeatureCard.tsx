@@ -44,9 +44,10 @@ const _AvatarWrapper = styled.div`
 
 type Props = {
   book: Book;
+  inFv?: boolean;
 };
 
-export const FeatureCard: React.FC<Props> = ({ book }) => {
+export const FeatureCard: React.FC<Props> = ({ book, inFv = false }) => {
   const imageUrl = `/assets/converted/${book.image.id}_96.webp`; // useImage({ height: 96, imageId: book.image.id, width: 96 });
   const authorImageUrl = `/assets/converted/${book.author.image.id}_96.webp`; //useImage({ height: 32, imageId: book.author.image.id, width: 32 });
 
@@ -54,7 +55,14 @@ export const FeatureCard: React.FC<Props> = ({ book }) => {
     <_Wrapper to={`/books/${book.id}`}>
       {imageUrl != null && (
         <_ImgWrapper>
-          <Image alt={book.image.alt} height={96} objectFit="cover" src={imageUrl} width={96} />
+          <Image
+            alt={book.image.alt}
+            height={96}
+            loading={inFv ? 'eager' : 'lazy'}
+            objectFit="cover"
+            src={imageUrl}
+            width={96}
+          />
         </_ImgWrapper>
       )}
 
@@ -69,7 +77,14 @@ export const FeatureCard: React.FC<Props> = ({ book }) => {
         <Flex align="center" gap={Space * 1} justify="flex-end">
           {authorImageUrl != null && (
             <_AvatarWrapper>
-              <Image alt={book.author.name} height={32} objectFit="cover" src={authorImageUrl} width={32} />
+              <Image
+                alt={book.author.name}
+                height={32}
+                loading={inFv ? 'eager' : 'lazy'}
+                objectFit="cover"
+                src={authorImageUrl}
+                width={32}
+              />
             </_AvatarWrapper>
           )}
           <Text color={Color.MONO_100} typography={Typography.NORMAL14}>

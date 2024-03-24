@@ -10,7 +10,7 @@ export const PickUpSection = () => {
   return (
     <Box maxWidth="100%" overflowX="scroll" overflowY="hidden">
       <Flex align="stretch" direction="row" gap={Space * 2} justify="flex-start">
-        {featureList?.map((feature) => <FeatureCard key={feature.id} book={feature.book} />)}
+        {featureList?.map((feature, index) => <FeatureCard key={feature.id} book={feature.book} inFv={index < 3} />)}
       </Flex>
     </Box>
   );
