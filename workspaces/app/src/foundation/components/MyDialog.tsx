@@ -1,8 +1,6 @@
 import { Close } from '@mui/icons-material';
-import { useAtom } from 'jotai';
 import styled from 'styled-components';
 
-import { DialogContentAtom } from '../atoms/DialogContentAtom';
 import { Color, Space } from '../styles/variables';
 
 import { Button } from './Button';
@@ -44,17 +42,24 @@ const _CloseButton = styled(Button)`
   left: -${Space * 1}px;
 `;
 
-export const Dialog: React.FC = () => {
-  const [content, updateContent] = useAtom(DialogContentAtom);
+type MyDialogProps = {
+  children: React.ReactNode;
+  onClose: () => void;
+  open: boolean;
+};
 
-  return content != null ? (
+export const MyDialog = ({ children, onClose, open }: MyDialogProps) => {
+  if (!open) {
+    return null;
+  }
+  return (
     <_Overlay>
       <_Wrapper>
-        <_CloseButton onClick={() => updateContent(null)}>
+        <_CloseButton onClick={onClose}>
           <Close style={{ color: Color.MONO_A, height: 32, width: 32 }} />
         </_CloseButton>
-        <_Container>{content}</_Container>
+        <_Container>{children}</_Container>
       </_Wrapper>
     </_Overlay>
-  ) : null;
+  );
 };
