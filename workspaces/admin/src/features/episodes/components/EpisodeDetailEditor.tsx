@@ -27,7 +27,6 @@ import { encrypt } from '@wsh-2024/image-encrypt/src/encrypt';
 import type { GetBookResponse } from '@wsh-2024/schema/src/api/books/GetBookResponse';
 import type { GetEpisodeResponse } from '@wsh-2024/schema/src/api/episodes/GetEpisodeResponse';
 
-import { getImageUrl } from '../../../lib/image/getImageUrl';
 import { isSupportedImage } from '../../../lib/image/isSupportedImage';
 import { useCreateEpisode } from '../hooks/useCreateEpisode';
 import { useCreateEpisodePage } from '../hooks/useCreateEpisodePage';
@@ -60,7 +59,7 @@ export const EpisodeDetailEditor: React.FC<Props> = ({ book, episode }) => {
       nameRuby: episode?.nameRuby,
     },
     onSubmit(values) {
-      console.log(values);
+      console.log(values, episode);
       if (episode == null) {
         return createEpisode(
           {
@@ -279,12 +278,7 @@ export const EpisodeDetailEditor: React.FC<Props> = ({ book, episode }) => {
                   _groupHover={{ opacity: 0.75 }}
                   alt={episode?.image.id}
                   height={200}
-                  src={
-                    thumbnailUrl ??
-                    (episode != null
-                      ? getImageUrl({ format: 'jpg', height: 200, imageId: episode.image.id, width: 200 })
-                      : undefined)
-                  }
+                  src={thumbnailUrl ?? (episode != null ? `/assets/converted/${episode.image.id}_128.webp` : undefined)}
                   width={200}
                 />
                 <Center
