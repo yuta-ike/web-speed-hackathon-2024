@@ -66,7 +66,7 @@ export const ListTable = memo(function ListTableInner({ kind, query }: ListTable
           <Th>作者名</Th>
         </Tr>
       )}
-      itemContent={(index, book) => <ListItem key={book.id} book={book} />}
+      itemContent={(_, book) => <ListItem key={book.id} book={book} />}
     />
   );
 });
